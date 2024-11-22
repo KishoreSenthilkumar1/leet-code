@@ -1,0 +1,15 @@
+uint32_t reverseBits(uint32_t n) {
+    uint32_t in = n;
+    uint32_t out = 0;
+    uint8_t len = sizeof(out) * 8 - 1;
+    uint32_t mask = 1;
+    
+    for(int i = 0; i < len ; i++)
+    {
+        out |= (in & mask) >> i;
+        mask *= 2;
+        out <<= 1;
+    }
+    out |= (in & mask) >> len;
+    return out;
+}

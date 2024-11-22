@@ -1,0 +1,17 @@
+int sumofdig(int num){
+     int rem,dig=0;
+    while(num!=0)
+    {
+        rem=num%10;
+        dig=dig+rem;
+        num/=10;
+    }
+    return dig;
+}
+int addDigits(int num) {
+   while(num>=10)
+   {
+    num=sumofdig(num);
+   }
+   return num;
+}

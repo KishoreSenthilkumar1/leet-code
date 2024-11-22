@@ -1,0 +1,48 @@
+#define TABLE_SIZE 256
+
+typedef struct hashTable {
+    int table[TABLE_SIZE];
+} hashTable;
+
+hashTable* createTable() {
+    hashTable* table = (hashTable*)malloc(sizeof(hashTable));
+    if (table == NULL) {
+        fprintf(stderr, "l'allocation de table a echouee\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        table->table[i] = 0;
+    }
+    return table;
+}
+
+void insertString(hashTable* table, const char* str) {
+    for (int i = 0; i < strlen(str); i++) {
+        table->table[(unsigned char)str[i]]++;
+    }
+}
+
+bool isAnagram(char* s, char* t) {
+    if (strlen(s) != strlen(t)) {
+        return false;
+    }
+
+    hashTable* table1 = createTable();
+    hashTable* table2 = createTable();
+
+    insertString(table1, s);
+    insertString(table2, t);
+
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        if (table1->table[i] != table2->table[i]) {
+            free(table1);
+            free(table2);
+            return false;
+        }
+    }
+
+    free(table1);
+    free(table2);
+    return true;
+}

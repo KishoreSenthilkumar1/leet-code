@@ -1,0 +1,96 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     struct TreeNode *left;
+ *     struct TreeNode *right;
+ * };
+ */
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int cnt = 0;
+int qcnt = 0;
+
+bool Isempty(void){
+    return qcnt < 0;
+}
+
+bool Isfull(void){
+    return qcnt >= 100;
+}
+
+void push(int val, int* q){
+    if(Isfull()){
+        printf("can't push anymore\n");
+        return;
+    }else{
+        q[qcnt++] = val;
+    }
+    return;
+}
+
+void pop(int* q ){
+    if(Isempty()){
+        printf("can't pop anymore\n");
+        return;
+    }else{
+        q[--qcnt] = -101;
+    }
+    return;
+}
+
+void fun_store(int* queue, char** ret){
+    ret[cnt] = (char*)calloc(4*qcnt + (qcnt-1)*2 +1, sizeof(char));//max case: each node is -100 (4 chars)
+    int localcnt = 0;
+    for(int i=0;i < qcnt; i++){
+        //process negative number & num>10 case
+        if(queue[i] < 0){
+            ret[cnt][localcnt++] = '-';
+        }
+        if(abs(queue[i]) == 100){
+            memcpy(ret[cnt] + localcnt, "100", 3*sizeof(char));
+            localcnt +=3;
+        }else{
+            if(abs(queue[i])-10 >= 0){
+                ret[cnt][localcnt++] = abs(queue[i])/10 + '0';
+            }
+            ret[cnt][localcnt++] = abs(queue[i])%10 + '0';
+        }
+        
+        if(i != (qcnt-1)){
+            ret[cnt][localcnt++] = '-';
+            ret[cnt][localcnt++] = '>';
+        }
+    }
+
+    ret[cnt][localcnt++] = '\0';
+    cnt++;//to switch to next path
+    return;
+}
+void fun(struct TreeNode* root, int* queue, char** ret){
+    if(!root){
+        return;
+    }
+    push(root->val, queue);//preorder, push the node first
+    fun(root->left, queue, ret);
+    fun(root->right,queue, ret);
+    //store the result
+    if(!root->left && !root->right){//the path can be stored only if the current node is leaf node
+        fun_store(queue, ret);
+    }
+    
+    pop(queue);//back to the prev layer, so pop out the current node
+    return;
+}
+
+char** binaryTreePaths(struct TreeNode* root, int* returnSize) {
+    int queue[100] = {-101};//max input node = 100, the min value = -100
+    char** ret = NULL;
+    ret = (char**)calloc(64, sizeof(int*));//100 nodes => 6 layers
+
+    fun(root, queue, ret);
+    *returnSize = cnt;
+    cnt = 0;
+    return ret;
+}

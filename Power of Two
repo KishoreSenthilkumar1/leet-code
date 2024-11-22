@@ -1,0 +1,11 @@
+bool isPowerOfTwo(int n) {
+    if(n==1)
+        return true;
+    long long signed int res=1;
+    while(res < n ){
+        res *= 2;
+    }
+    if(res == n)
+        return true;
+    return false; 
+}

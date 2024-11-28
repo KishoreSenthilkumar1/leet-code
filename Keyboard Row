@@ -1,0 +1,37 @@
+
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+
+char** findWords(char** words, int wordsSize, int* returnSize) {
+    char row1[] = "qwertyuiop";
+    char row2[] = "asdfghjkl";
+    char row3[] = "zxcvbnm";
+    
+    char** result = (char**)malloc(wordsSize * sizeof(char*));
+    *returnSize = 0; // Initialize return size to 0
+
+    for (int i = 0; i < wordsSize; i++) {
+        int len = strlen(words[i]);
+        int row1Count = 0, row2Count = 0, row3Count = 0;
+        for (int j = 0; j < len; j++) {
+            char c = tolower(words[i][j]); // convert character to lowercase
+            if (strchr(row1, c) != NULL)
+                row1Count++;
+            else if (strchr(row2, c) != NULL)
+                row2Count++;
+            else if (strchr(row3, c) != NULL)
+                row3Count++;
+        }
+        if ((row1Count == 0 || row1Count == len) && (row2Count == 0 || row2Count == len) && (row3Count == 0 || row3Count == len)) {
+            // This part checks if either all characters of the word are from row 1 or no characters are from row 1. 
+            //If row1Count is 0, it means none of the characters of the word are from row 1, and if row1Count equals the length of the word,
+            // it means all characters are from row 1.
+            result[*returnSize] = (char*)malloc((len + 1) * sizeof(char));
+            strcpy(result[*returnSize], words[i]);
+            (*returnSize)++;
+        }
+    }
+    
+    return result;
+}

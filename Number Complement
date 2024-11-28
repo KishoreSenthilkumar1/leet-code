@@ -1,0 +1,8 @@
+int findComplement(int num) {
+    long int value = 0, i=1;
+    while (num>=i){
+        value+= i;
+        i=i<<1;
+    }
+    return num ^ value;
+}

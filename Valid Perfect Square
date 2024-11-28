@@ -1,0 +1,13 @@
+bool isPerfectSquare(int num) {
+    int n = 0, num_0;
+    num_0 = num;
+    if (num < 1 || num > INT_MAX)
+        return false;
+
+    while (num_0 > 0) {
+
+        num_0 -= 2 * n + 1;
+        n++;
+    }
+    return (num_0 == 0);
+}

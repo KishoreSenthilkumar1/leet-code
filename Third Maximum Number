@@ -1,0 +1,51 @@
+
+
+int thirdMax(int* nums, int numsSize) {
+    long first = LONG_MIN, second = LONG_MIN, third = LONG_MIN;
+
+    for (int i = 0; i < numsSize; i++) {
+        if (nums[i] == first || nums[i] == second || nums[i] == third) {
+            continue;
+        }
+
+        if (nums[i] > first) {
+            third = second;
+            second = first;
+            first = nums[i];
+        } else if (nums[i] > second) {
+            third = second;
+            second = nums[i];
+        } else if (nums[i] > third) {
+            third = nums[i];
+        }
+    }
+
+    return third == LONG_MIN ? first : third;
+}
+
+int mein() {
+    int nums[20], numsSize;
+
+    printf("Enter the size of the array: ");
+    scanf("%d", &numsSize);
+
+    if (numsSize > 20 || numsSize < 1) {
+        printf("Invalid size. Size should be between 1 and 20.\n");
+        return 1;
+    }
+
+    printf("Enter %d elements in the array: ", numsSize);
+    for (int i = 0; i < numsSize; i++) {
+        scanf("%d", &nums[i]);
+    }
+
+    int result = thirdMax(nums, numsSize);
+
+    if (result == LONG_MIN) {
+        printf("There are fewer than three distinct numbers.\n");
+    } else {
+        printf("The third distinct maximum number is: %d\n", result);
+    }
+
+    return 0;
+}

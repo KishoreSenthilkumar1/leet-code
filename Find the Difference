@@ -1,0 +1,12 @@
+char findTheDifference(char* s, char* t) {
+    int firstSum = 0;
+    int secondSum = 0;
+
+    for (int i = 0; i < strlen(s) + 1; i++)
+    {
+        firstSum += s[i];
+        secondSum += t[i];
+    }
+
+    return (char) (secondSum - firstSum);
+}

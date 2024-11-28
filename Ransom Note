@@ -1,0 +1,53 @@
+// method 1
+// bool canConstruct(char* ransomNote, char* magazine) {
+//     int num = 0;
+//     int len = strlen(ransomNote);
+//     // printf("%d\n",strlen(ransomNote));
+//     for(int j = 0; j < strlen(ransomNote); j++){
+//         for(int i = 0; i < strlen(magazine); i++){
+//             if(*(ransomNote+j) == *(magazine+i)){
+//                 // printf("%c,%c\n",*ransomNote, *(magazine+i));
+//                 *(magazine+i) = ' ';
+//                 num += 1;
+//                 break;
+//             }
+//         }
+//     }
+//     // printf("%d, %d",len, num);
+//     return len == num ? true : false;
+// }
+
+// 最優最快
+bool canConstruct(char* ransomNote, char* magazine) {
+    // 初始化一個長度為 26 的整數陣列來統計字母出現次數
+    int arrCount[26] = {0};  
+
+    // 遍歷 magazine 中的每個字符並增加對應字母的計數
+    for (int i = 0; magazine[i]; i++){
+        arrCount[magazine[i] - 'a']++;
+    }
+
+    // 遍歷 ransomNote 中的每個字符
+    for (int i = 0; ransomNote[i]; i++){
+        // 在陣列中對應的計數減 1，並檢查計數是否小於 0
+        if (--arrCount[ransomNote[i] - 'a'] < 0)
+            return false;  // 如果任何字母的計數小於 0，表示 magazine 中的該字母不足，返回 false
+    }
+
+    // 如果所有字母的計數都足夠，返回 true
+    return true;
+}
+
+// // recursive
+// bool canConstruct(char* ransomNote, char* magazine) {
+//     if(*ransomNote == '\0'){
+//         return true;
+//     }
+//     for(int i = 0; i < strlen(magazine); i++){
+//         if(*ransomNote == *(magazine+i)){
+//             *(magazine+i) = ' ';
+//             return canConstruct(ransomNote + 1, magazine);
+//         }
+//     }
+//     return false;
+// }

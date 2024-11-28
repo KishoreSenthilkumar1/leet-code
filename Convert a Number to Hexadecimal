@@ -1,0 +1,24 @@
+char* toHex(int num) {
+    char *res = (char *)malloc(8 * sizeof(char)+1);
+    res[8] = '\0';
+    for(int i = 0; i<8; i++){
+        int masked_res = (num & 0xF);
+        res[7-i] = (masked_res < 10) ?  masked_res + 48: masked_res + 87;
+        num >>= 4;
+    }
+
+
+    int cnt = 0;
+    int i = 0;
+    while(res[i] == '0' && i!=7){
+        cnt++;
+        i++;
+    }
+
+    res += cnt;
+
+    return res;
+
+
+
+}

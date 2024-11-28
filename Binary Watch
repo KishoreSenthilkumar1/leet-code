@@ -1,0 +1,93 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int fact[11] = {1,1,2,6,24,120,720,5040,40320,362880,3628800};
+
+int * createBitmasks(int setBits, int * returnSize) {
+    // Returns an array of bitmasks for all possible ways to set/
+    // setBits among the first 10 bits
+
+    *returnSize = fact[10]/(fact[setBits]*fact[10-setBits]);
+
+    int * out = calloc((*returnSize),sizeof(int));
+    int val = (1<<setBits)-1 ;
+    out[0] = val;
+    for (int i=1;i<*returnSize;i++) {
+        // Find first set bit in val;
+        int firstSetBit = 0;
+        while (!((1<<firstSetBit)&val)) firstSetBit++;
+        // Find length of sequence of bits
+        int seqBitsSize = 0;
+        while ((1<<(firstSetBit+seqBitsSize))&val) seqBitsSize++;
+
+        // Set bit to the left of sequence as 1;
+        val |= (1<<(firstSetBit+seqBitsSize));
+        // Set only initial seqBitsSize-1 bits as 1;
+        val &= ~((1<<(firstSetBit+seqBitsSize))-1);
+        val |= (1<<(seqBitsSize-1))-1;
+        out[i] = val;
+    }
+    return out;
+};
+
+void print_binary(int n) {
+    for (int i=0;i<10;i++) {
+        printf("%d",n&(1<<i)?1:0);
+    }
+    return;
+}
+char** readBinaryWatch(int turnedOn, int* returnSize) {
+    /* BITMASKS TEST
+    for (int n=1;n<=5;n++) {
+        printf("n=%d\n",n);
+        int rSize;
+        int * out = bitmasks(n, &rSize);
+        for (int i=0;i<rSize;i++) {
+            print_binary(out[i]);
+            printf("\n");
+        }
+        printf("----------\n");
+        free(out);
+    }
+    */
+
+    int bitmaskReturnSize;
+    int * bitmasks = createBitmasks(turnedOn, &bitmaskReturnSize);
+
+    char ** out = malloc(bitmaskReturnSize*sizeof(char*));
+    *returnSize = 0;
+    for (int i=0;i<bitmaskReturnSize;i++) {
+        // First 6 bits give minute
+        int minute = bitmasks[i] & ((1<<6) - 1);
+        if (minute>=60) continue;
+
+        // Bits 6-9 give hour
+        int hour = (bitmasks[i]>>6) & ((1<<4)-1);
+        if (hour>=12) continue;
+
+        // Otherwise, add hour to out:
+        int ix;
+        if (hour<10) {
+            out[*returnSize]=malloc(5*sizeof(char));
+            out[*returnSize][4]=0;
+            out[*returnSize][0] = hour+'0';
+            ix=1;
+        } else {
+            out[*returnSize]=malloc(6*sizeof(char));
+            out[*returnSize][5]=0;
+            out[*returnSize][0] = '1';
+            out[*returnSize][1] = (hour-10)+'0';
+            ix = 2;
+        }
+        out[*returnSize][ix++]=':';
+        out[*returnSize][ix++]=(minute/10)+'0';
+        out[*returnSize][ix] = (minute%10)+'0';
+
+        (*returnSize)++;
+    }
+
+    // Reallocating to proper size...
+    out = realloc(out,(*returnSize)*sizeof(char*));
+    free(bitmasks);
+    return out;
+}

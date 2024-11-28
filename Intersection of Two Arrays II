@@ -1,0 +1,52 @@
+/**
+ * Note: The returned array must be malloced, assume caller calls free().
+ */
+int* intersect(int* nums1, int nums1Size, int* nums2, int nums2Size, int* returnSize) {
+    int count1[1001] = {0};
+    int count2[1001] = {0};
+    int i;
+
+    //  Count frequencies of elements in nums1
+    for (i = 0; i < nums1Size; i++)
+    {
+         count1[nums1[i]]++;
+    }
+
+  // Count frequencies of elements in nums2
+    for (i = 0; i < nums2Size; i++) 
+    {
+         count2[nums2[i]]++;
+    }
+     // minimum size of intersection array
+    int size=0;
+    if(nums1Size<nums2Size){
+        size=nums1Size;
+    }
+    else{
+        size=nums2Size;
+    }
+    int* result = (int*)malloc(size * sizeof(int));
+    int index = 0;
+    //find intersection
+    for (i = 0; i < 1001; i++)
+     {
+        int minCount=0;
+        if(count1[i] < count2[i])
+        {
+           minCount = count1[i];
+        }
+        else
+        {
+           minCount = count2[i];
+        }
+        for (int j = 0; j < minCount; j++) {
+            result[index] = i;
+            index++;
+        }
+    }
+   
+    *returnSize=index;
+    return result;
+
+
+}

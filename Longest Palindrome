@@ -1,0 +1,21 @@
+int longestPalindrome(char* s) {
+    if(strlen(s) < 2){
+        return strlen(s);
+    }
+
+    int freq[128] = {0};
+    for(int i = 0 ; i < strlen(s) ; i++){
+        freq[s[i]]++;
+    }
+    int count = 0;
+    for(int i = 0 ; i < strlen(s) ; i++){
+        if(freq[s[i]] != 0){
+            if(freq[s[i]] % 2 != 0){
+                count++;
+            }
+            freq[s[i]] = 0;
+        }
+    }
+
+    return (count == 1 || count == 0 ) ? strlen(s) : strlen(s) - count + 1;
+}

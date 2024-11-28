@@ -1,0 +1,12 @@
+int hammingDistance(int x, int y) {
+ int count = 0;
+ int SetBits=0;
+ SetBits=x^y;
+while(SetBits)
+{
+SetBits=SetBits &(SetBits -1);
+count++;
+}
+ 
+return count;
+}

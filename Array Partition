@@ -1,0 +1,18 @@
+int arrayPairSum(int* nums, int numsSize) {
+    int freq[20001] = {0};
+    for (int i = 0; i < numsSize; i++) {
+        freq[nums[i] + 10000]++;
+    }
+    int sum = 0;
+    bool isEven = true;
+    for (int i = 0; i < 20001; i++) {
+        while (freq[i] > 0) {
+            if (isEven) {
+                sum += i - 10000;
+            }
+            isEven = !isEven;
+            freq[i]--;
+        }
+    }
+    return sum;
+}
